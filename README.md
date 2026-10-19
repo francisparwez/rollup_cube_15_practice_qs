@@ -44,7 +44,7 @@ The scripts create five tables:
 | `01-schema__data.sql`               | Creates `SalesAnalyticsDB` and all five tables                                |
 | `02-data-insertion-query.sql`       | Inserts the dimension data and generates 120 sales transactions               |
 | `03-verifying-schema.sql`           | Verifies expected row counts for all five tables and reports `PASS` or `FAIL` |
-| `04-beginner-level.sql`             | Implementations for beginner questions 1–2 using `ROLLUP` and `GROUPING()`    |
+| `04-beginner-level.sql`             | Implementations for beginner questions 1–4 using `ROLLUP` and `GROUPING()`    |
 | `15 SQL ROLLUP & CUBE Practice.pdf` | The 15 practice questions (8 beginner and 7 intermediate)                     |
 
 Keep the SQL scripts and practice PDF together in the same project folder.
@@ -145,14 +145,14 @@ In this result, a `NULL` produced by `ROLLUP` represents an aggregated level, su
 
 ## Practice questions
 
-The accompanying PDF contains these 15 exercises. The current implementation file, `04-beginner-level.sql`, contains completed solutions for beginner questions 1 and 2. The `03-verifying-schema.sql` script checks the expected record counts. Continue attempting the remaining questions yourself before looking up syntax or asking for a hint.
+The accompanying PDF contains these 15 exercises. The current implementation file, `04-beginner-level.sql`, contains completed solutions for beginner questions 1–4. These queries use `ROLLUP` and `GROUPING()` for regional totals, region/category subtotals, category quantity totals, salesperson/region subtotals, and grand totals. The `03-verifying-schema.sql` script checks the expected record counts. Continue attempting the remaining questions yourself before looking up syntax or asking for a hint.
 
 ### Beginner — Questions 1–8
 
 1. **Total sales by region + grand total — completed** in `04-beginner-level.sql`. Uses `ROLLUP(r.region)` and `GROUPING(r.region)` to label the grand-total row.
 2. **Sales by region and category — completed** in `04-beginner-level.sql`. Joins `Sales`, `Regions`, `Products`, and `Categories`; uses `ROLLUP(r.region, c.category)` to calculate region/category detail, regional subtotals, and the grand total. `GROUPING()` labels the subtotal and grand-total rows.
-3. **Quantity sold by category** — use `SUM(quantity)`.
-4. **Sales by salesperson and region** — aggregate in salesperson-then-region order.
+3. **Quantity sold by category — completed** in `04-beginner-level.sql`. Uses `SUM(s.quantity)` and `ROLLUP(c.category)` to return each category total and the grand total.
+4. **Sales by salesperson and region — completed** in `04-beginner-level.sql`. Joins sales to `Salespeople` using `salesperson_id`; uses `ROLLUP(sp.salesperson, r.region)` to return salesperson/region totals, salesperson subtotals, and the grand total.
 5. **Average sale amount by region** — use `AVG(amount)` and include the overall average.
 6. **Number of sales by category** — use `COUNT(*)`.
 7. **Sales by region and city** — show city detail, regional subtotals, and the grand total.
@@ -229,8 +229,7 @@ These functions help distinguish a `NULL` introduced by a subtotal from a `NULL`
 - [x] Run the schema script.
 - [x] Run the insertion script.
 - [x] Verify the record counts.
-- [x] Complete beginner questions 1–2 (`04-beginner-level.sql`).
-- [ ] Complete beginner questions 3–4.
+- [x] Complete beginner questions 1–4 (`04-beginner-level.sql`).
 - [ ] Complete beginner questions 5–8.
 - [ ] Complete intermediate questions 9–12.
 - [ ] Complete intermediate questions 13–15.
@@ -244,6 +243,7 @@ These functions help distinguish a `NULL` introduced by a subtotal from a `NULL`
 - Aggregate functions (`SUM`, `AVG`, `COUNT`)
 - `GROUP BY`, `ROLLUP`, and `CUBE`
 - `GROUPING()` for identifying and labelling aggregation rows
+- Hierarchical subtotals by category, region, and salesperson
 - `GROUPING_ID()` (covered in the remaining practice exercises)
 - Window functions
 - Date-based aggregation
