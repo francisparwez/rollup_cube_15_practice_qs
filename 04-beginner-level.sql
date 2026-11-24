@@ -1,6 +1,3 @@
-USE SalesAnalyticsDB;
-GO
-
 --1. Total Sales by Region + Grand Total
 --Using ROLLUP , calculate total sales for each region .
 --Your result should contain:
@@ -12,6 +9,9 @@ GO
 --  West ...
 --  NULL Grand Total
 --Requirement: Use ROLLUP .
+
+USE SalesAnalyticsDB;
+GO
 
 SELECT
     CASE
@@ -41,6 +41,9 @@ GROUP BY
 --     South NULL ← South subtotal
 --     NULL NULL ← Grand total
 
+USE SalesAnalyticsDB;
+GO
+
 SELECT
     CASE
         WHEN GROUPING(r.region) = 1 THEN 'Grand Total'
@@ -66,6 +69,9 @@ GROUP BY
 --     Grand total quantity
 -- Use:
 --     SUM(quantity)
+
+USE SalesAnalyticsDB;
+GO
 
 SELECT
     CASE
@@ -97,6 +103,9 @@ GROUP BY
 
 -- 4. Sales by Salesperson and Region
 
+USE SalesAnalyticsDB;
+GO
+
 SELECT
     CASE
         WHEN GROUPING(sp.salesperson) = 1 THEN 'Grand Total'
@@ -114,3 +123,26 @@ FROM
     JOIN Salespeople AS sp ON s.salesperson_id = sp.salesperson_id
 GROUP BY
     ROLLUP (sp.salesperson, r.region);
+
+-- 5. Average Sale Amount by Region
+-- Using ROLLUP , calculate:
+--     Average sale amount per region
+--     Overall average sale amount
+-- Use:
+--     AVG(amount)
+
+USE SalesAnalyticsDB;
+GO
+
+SELECT
+    CASE
+        WHEN GROUPING(r.region) = 1 THEN 'Overall Average'
+        ELSE r.region
+    END AS region,
+    CAST(
+        AVG(s.amount) AS DECIMAL(12, 2)
+    ) AS average_sale_amount
+FROM Regions r
+    JOIN Sales s ON r.region_id = s.region_id
+GROUP BY
+    ROLLUP (r.region);
